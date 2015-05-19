@@ -1,0 +1,35 @@
+form, input, .links {
+	font-size: 14pt;
+	font-family: "Avenir"; 
+	color: rgb(41, 128, 185); 
+	text-align: center; 
+	margin-bottom: 40px; 
+}
+
+.flash {
+	font-size: 14pt;
+	font-family: "Avenir"; 
+	color: red; 
+	text-align: center; 
+	margin-bottom: 40px; 
+}
+
+.logout { 
+	font-size: 14pt;
+	font-family: "Avenir"; 
+	color: white; 
+	text-align: right; 
+}
+
+.logout { 
+	font-size: 14pt;
+	font-family: "Avenir"; 
+	color: white; 
+	text-align: right; 
+}
+
+#link {
+	position: fixed; 
+	right: 20px; 
+	top: 1px;
+}

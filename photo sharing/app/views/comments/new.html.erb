@@ -1,0 +1,52 @@
+<% content_for :title, "Comments" %>
+<% content_for :stylesheet, (stylesheet_link_tag "photos") %>
+
+<% if @photo != nil %> 
+	<div class="content"> 
+		<div class="photos" >
+			<%= image_tag "#{@photo.file_name}", size: "350x350" %>
+			<p class="date">  
+				<%= @photo.date_time %> 
+			</p> 
+		</div> 
+		<div class = "comments"> 
+			<% if !@photo.comments.empty? %> 
+				<% @photo.comments.each do |comment| %> 
+					<hr></hr>
+					<% user = User.find(comment.user_id) %> 
+					<h1> <%= link_to "#{user.first_name} #{user.last_name}", {:controller => "photos", :action => "index", :id => user}%> </h1> 
+					<% if comment.comment != nil%>
+						<%= comment.comment %>  
+					<% end %>
+					<br></br>  
+					<%= comment.date_time %> 
+					<br></br> 
+				<% end %> 
+			<% else %> 
+				<hr></hr> 
+				Somebody, love me. 
+			<%end%> 
+		</div> 
+	</div> 
+<% else %> 
+	<p class="links"> 
+		<i> Please choose a quiche photo to comment.</i>
+	</p>
+<% end %> 
+
+<% if params[:id] != nil && Photo.all.exists?(params[:id]) %>
+	<% @comment.errors.full_messages.each do |msg| %>
+			<p class="flash"><%= msg %></p>
+	<% end %>
+<% end %> 
+
+<% if @photo != nil && session[:user] != nil %> 
+	<%= form_for(@comment, :method => "post", :url => {:action => "create", :id => @photo.id}) do |form| %>
+		<div class = "links"> 
+		<p> Enter a comment: </p> 
+	    <%= form.text_area (:comment), size: "80x10"%>
+	    <br></br> 
+	 	<%= submit_tag "Post" %>
+	 	</div> 
+	<% end %>
+<% end %>

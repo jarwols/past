@@ -1,0 +1,67 @@
+<% content_for :title, "View Photo" %>
+<% content_for :stylesheet, (stylesheet_link_tag "tags") %>
+
+<div class="include"> 
+	<div class="container">
+		<% if !@photo.tags.empty? %> 
+			<% @photo.tags.each do |tag| %> 
+				<div style="width: <%= tag.div_width%>px; height: <%= tag.div_height %>px; top: <%= tag.y_coord %>px; left: <%= tag.x_coord %>px;" class="tags">
+					<% user = User.find(tag.user_id)%>
+					<div class="names">
+						<%= "#{user.first_name} #{user.last_name}" %> 
+					</div> 
+				</div> 
+			<% end %> 
+		<% end %> 
+		<div id="<%= dom_id(@photo) %>" class="tagging">  
+			<div id="tag"></div> 
+			<%= image_tag "#{@photo.file_name}", size: "400x400" %>
+		</div> 
+		<p class="date">  
+			<%= @photo.date_time %> 
+		</p> 
+		<h2> <%= link_to "New Comment", {:controller => "comments", :action => "new", :id => @photo.id}%> 
+		</h2>
+		<div class="dropdown"> 
+			<%= form_for(@tag, :method => "post", :url => {:action => "tag"}) do |form| %>
+				<div><%= form.hidden_field(:div_width, { :id => "div_width" }) %> 
+				<%= form.hidden_field(:div_height, { :id => "div_height" }) %> 
+				<%= form.hidden_field(:x_coord, { :id => "x_coord" }) %> 
+				<%= form.hidden_field(:y_coord, { :id => "y_coord" }) %> 
+				<%= select_tag(:user_id, options_from_collection_for_select(User.all, :id, :name)) %>
+	  			<%= submit_tag "Tag" %></div>
+			<% end %>
+		</div> 
+	</div> 
+	<% if flash[:notice] %>
+		<p class = "flash"><%= flash[:notice] %></p>
+		<%= flash[:notice] = nil %> 
+	<% end %>
+	<div class = "comments"> 
+		<% if !@photo.comments.empty? %> 
+			<% @photo.comments.each do |comment| %> 
+				<hr></hr>
+				<% user = User.find(comment.user_id) %> 
+				<h1> <%= link_to "#{user.first_name} #{user.last_name}", {:controller => "photos", :action => "index", :id => user}%> </h1> 
+				<% if comment.comment != nil%>
+					<%= comment.comment %>  
+				<% end %>
+				<br></br>  
+				<%= comment.date_time %> 
+				<br></br> 
+			<% end %> 
+		<% else %> 
+			<hr></hr> 
+			Somebody, love me. 
+		<%end%> 
+	</div> 
+</div> 
+
+<%= javascript_include_tag "tagger", :type=>"text/javascript" %>
+<%= javascript_include_tag "dragger", :type=>"text/javascript" %> 
+<script type="text/javascript">
+	//<![CDATA[
+		var drag = new Dragger("me");
+		var tag = new Tagger("tag", "<%= dom_id(@photo)%>", "div_width", "div_height", "x_coord", "y_coord"); 
+	//]]>
+</script>

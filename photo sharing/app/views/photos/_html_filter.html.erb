@@ -1,0 +1,5 @@
+<% @results.each do |result| %> 
+
+	<%= link_to image_tag(result.file_name, size: "40x40", :class =>"results"), {:controller => "photos", :action => "index", :id => result.user_id, :anchor => dom_id(result) } %>
+
+<% end %> 

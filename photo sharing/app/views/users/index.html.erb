@@ -1,0 +1,42 @@
+<% content_for :title, "Friends" %>
+<% content_for :stylesheet, (stylesheet_link_tag "users") %>
+
+<div>
+  <p class="links">
+    Take a gander at our <i>beautiful</i> and <b>talented</b> users. 
+  </p> 
+  <br></br> 
+  <div class="search"> 
+    <%= form_tag @user, :method => "get", :id => "user_search" do %>
+      <div>
+        <%= label_tag "Search : " %>
+        <%= text_field_tag :substring, params[:substring] %> 
+        </div>
+    <% end %>
+  </div> 
+  <div id="search_term" class="search_term"></div> 
+  <div class="list"> 
+    <% if @users != nil %>  
+      <% @users.each do |user|%>
+        <% if user.photos.exists? %>
+            <div class = "contain">
+              <%= image_tag "#{user.photos.first.file_name}", size: "350x350", :class => "usrphoto" %>
+              <%= link_to "#{user.first_name} #{user.last_name}", {:controller => "photos", :action => "index", :id => user}, :class => "links" %>
+            </div> 
+        <% end %> 
+        <br></br> 
+      <% end %>
+    <% else %>
+        <p class="links">
+          <i> please, I beg, don't abuse this gorgeous website. </i>  
+        </p> 
+    <% end %> 
+  </div> 
+</div> 
+
+<%= javascript_include_tag "search", :type=>"text/javascript" %> 
+<script type="text/javascript">
+  //<![CDATA[
+    var search = new Search("substring", "search_term", "/photos/find_photos?substring=")
+  //]]>
+</script>

@@ -1,0 +1,36 @@
+<% content_for :title, "User Registration" %>
+
+<div class ="links"> 
+	<p id="big">Welcome to RuBee!</p><br></br> Let's sign you up.
+	<%= form_for(@user, :url => {:action => "create"}) do |form| %>
+		<div>
+		<p>First Name:</p>
+		<%= form.text_field :first_name%>
+		</div> 
+	    <div>
+		<p>Last Name:</p>
+	    <%= form.text_field :last_name%>
+		</div>
+	    <div> 
+	    <p>Username:</p> 
+	    <%= form.text_field :login%>
+		</div> 
+	    <div> 
+	    <p>Password:</p>
+	    <%= form.password_field :password%>
+		</div> 
+	    <div> 
+		<p>Password:</p> 
+	    <%= form.password_field :password_confirmation%>
+	    </div> 
+	    <% if flash[:notice] %>
+		  <p class = "flash"><%= flash[:notice] %></p>
+		<% end %>
+		<% @user.errors.full_messages.each do |msg| %>
+			<p class="flash"><%= msg %></p>
+		<% end %>
+		<div>
+	 	<%= form.submit "Register" %>
+	 	</div> 
+	<% end %> 
+</div> 

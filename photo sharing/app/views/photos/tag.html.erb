@@ -1,0 +1,59 @@
+<% content_for :title, "View Photo" %>
+<% content_for :stylesheet, (stylesheet_link_tag "tags") %>
+
+<div class="include"> 
+	<div class="tagging">
+		<div id="<%= dom_id(@photo) %>" class="tagging">  
+			<div id="tag"></div> 
+			<%= image_tag "#{@photo.file_name}"%>
+		</div> 
+		<p class="date">  
+			<%= @photo.date_time %> 
+		</p> 
+		<h2> <%= link_to "New Comment", {:controller => "comments", :action => "new", :id => @photo.id}%> 
+		</h2>
+		<%= form_for(@photo, :method => "post", :url => {:action => "create"}) do |form| %>
+			<% form.hidden_field(:tag, :name, { :id => "name" }) %> 
+		<%end %>
+		<div> 
+	 	</div>
+		<div class="dropdown"> 
+			<select>
+				<% @users.each do |user| %> 
+	  			<option value="<%=user%>"><%= user.first_name%> <%= user.last_name%></option>
+	  			<%end%> 
+	  			<br></br> 
+	  			<br></br>
+	  			<%= submit_tag "Tag" %>
+			</select>
+		</div> 
+	</div> 
+	<div class = "comments"> 
+		<% if !@photo.comments.empty? %> 
+			<% @photo.comments.each do |comment| %> 
+				<hr></hr>
+				<% user = User.find(comment.user_id) %> 
+				<h1> <%= link_to "#{user.first_name} #{user.last_name}", {:controller => "photos", :action => "index", :id => user}%> </h1> 
+				<% if comment.comment != nil%>
+					<%= comment.comment %>  
+				<% end %>
+				<br></br>  
+				<%= comment.date_time %> 
+				<br></br> 
+			<% end %> 
+		<% else %> 
+			<hr></hr> 
+			Somebody, love me. 
+		<%end%> 
+	</div> 
+</div> 
+
+<%= javascript_include_tag "tagger" %>
+<%= javascript_include_tag "dragger" %> 
+
+<script type="text/javascript">
+	//<![CDATA[
+		new Dragger("me");
+		new Tagger("tag", "<%= dom_id(@photo)%>"); 
+	//]]>
+</script>

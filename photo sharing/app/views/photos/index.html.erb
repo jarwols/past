@@ -1,0 +1,63 @@
+<% content_for :title, "Photos" %>
+<% content_for :stylesheet, (stylesheet_link_tag "photos") %>
+
+
+<% if @user != nil %> 
+	<div id="username"> 
+		<%= "#{@user.first_name} #{@user.last_name}" %>
+	</div> 
+	<% @photos.each do |photo| %> 
+		<div class="content"> 
+			<div class="photos">
+				<div id="<%= dom_id(photo) %>" size="350x350" style="max-height: 350px; max-width: 350px">  
+					<%= image_tag "#{photo.file_name}", size: "350x350" %>
+				</div> 
+				<p class="date">  
+					<%= photo.date_time %> 
+				</p> 
+				<h2> <%= link_to "New Comment", {:controller => "comments", :action => "new", :id => photo.id}%> 
+				</h2>
+				<h2> <%= link_to "Tag Users", {:controller => "tags", :action => "tag", :id => photo.id}%> 
+				</h2>
+			</div> 
+			<div class = "comments"> 
+				<% if !photo.comments.empty? %> 
+					<% photo.comments.each do |comment| %> 
+						<hr></hr>
+						<% user = User.find(comment.user_id) %> 
+						<h1> <%= link_to "#{user.first_name} #{user.last_name}", {:controller => "photos", :action => "index", :id => user}%> </h1> 
+						<% if comment.comment != nil%>
+							<%= comment.comment %>  
+						<% end %>
+						<br></br>  
+						<%= comment.date_time %> 
+						<br></br> 
+					<% end %>
+					<% if !photo.tags.empty? %>
+						<p class ="tagged"> Tagged:	</p>
+						<% photo.tags.each do |tag| %>
+							<% user = User.find_by_id(tag.user_id) %> 
+							<p class="individual"> <%= "#{user.first_name} #{user.last_name}" %> </p>
+						<%end %>  
+					<%end %>  
+				<% else %> 
+					<hr></hr> 
+					Somebody, love me. 
+				<%end%> 
+			</div> 
+		</div> 
+	<% end %> 
+<% else %> 
+	<p class="links"> 
+		<i> Please, I beg, don't abuse this gorgeous website. </i>
+	</p> 
+<% end %> 
+
+<%= javascript_include_tag "tagger" %>
+<%= javascript_include_tag "dragger" %> 
+
+<script type="text/javascript">
+	//<![CDATA[
+		new Dragger("me");
+	//]]>
+</script>

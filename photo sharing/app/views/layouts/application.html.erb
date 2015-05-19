@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title><%= yield :title %></title>
+	  <%= stylesheet_link_tag "application" %>
+	  <%= yield :stylesheet %>
+</head>
+
+<body>
+	<div class="login"> 
+	   <div id = "newuser"> <%= link_to "New User", {:controller => "users", :action => "new"}, :class => "logout" %>	|	<%= link_to "Upload Photo", {:controller => "photos", :action => "new"}, :class => "logout" %>	|	<%= link_to "Friends List", {:controller => "users", :action => "index"}, :class => "logout" %></div>
+	  <% if session[:user] == nil %> 
+	    <div id = "link"> 
+	      <%= link_to "Login", {:controller => "users", :action => "login"}, :class => "logout" %>
+	    </div> 
+	  <% else %> 
+	    <div id = "link"> 
+	      Hi <%= session[:user].first_name%>!  <%= link_to "Logout", {:controller => "users", :action => "logout"}%>
+	    </div> 
+	  <% end %> 
+	</div> 
+	<div id = "normal" > 
+		<%= image_tag "124layout3.png", width: '100%' %>
+	</div>
+	<div id = "me">
+		<%= image_tag "jared.png"%>
+	</div> 
+	<%= yield %> 
+</body>
+</html>
+
+
+

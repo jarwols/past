@@ -1,0 +1,16 @@
+<% content_for :title, "Photo Upload" %>
+
+<% if flash[:notice] %>
+	<p class = "flash"><%= flash[:notice] %></p>
+<% end %>
+
+<% if session[:user] != nil %> 
+	<%= form_for(@photo, :method => "post", :url => {:action => "create"}) do |form| %>
+		<div> 
+			<p> Upload a photo: </p> 
+		    <%= form.file_field :photo%>
+		    <br></br> 
+		 	<%= submit_tag "Upload" %>
+	 	</div>
+	<% end %>
+<% end %> 
